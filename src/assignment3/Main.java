@@ -1,14 +1,13 @@
 /* WORD LADDER Main.java
  * EE422C Project 3 submission by
- * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * Aaron Chang
+ * AAC3434
+ * 16475
+ * Ka Tai Ho
+ * KH33248
+ * 16465
  * Slip days used: <0>
- * Git URL:
+ * Git URL: https://github.com/aaronachang/EE-422C.git
  * Fall 2016
  */
 
@@ -51,8 +50,13 @@ public class Main {
 	 * If command is /quit, return empty ArrayList. 
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
-		// TO DO
-		return null;
+		ArrayList<String> result = new ArrayList<String>(0);
+		String start = keyboard.nextLine();
+		if (!start.equals("/quit")) {
+			result.add(start);
+			result.add(keyboard.nextLine());
+		}
+		return result;
 	}
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
@@ -91,8 +95,14 @@ public class Main {
 		return words;
 	}
 	
+	/**
+	 * Prints word latter if it exists.
+	 * @param ladder
+	 */
 	public static void printLadder(ArrayList<String> ladder) {
-		
+		for (int i = 0; i < ladder.size(); i++) {
+			System.out.println(ladder.get(i));
+		}
 	}
 	// TODO
 	// Other private static methods here
