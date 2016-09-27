@@ -1,1 +1,1 @@
-# Project3 (Word Ladder)
+# Project 3 (Word Ladder)
