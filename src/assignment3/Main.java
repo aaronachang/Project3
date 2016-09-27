@@ -7,32 +7,19 @@
  * KH33248
  * 16465
  * Slip days used: <0>
- * Git URL: https://github.com/aaronachang/EE-422C.git
+ * Git URL: https://github.com/aaronachang/Project3.git
  * Fall 2016
  */
 
 package assignment3;
 
-/* WORD LADDER Main.java
- * EE422C Project 3 submission by
- * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
- * Slip days used: <0>
- * Git URL:
- * Fall 2016
- */
-
 import java.util.*;
 import java.io.*;
 
 public class Main {
-	
-	// static variables and constants only here.
+
+	private static String start;
+	private static String end;
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -51,21 +38,20 @@ public class Main {
 		
 		ArrayList<String> input = parse(kb);
 		
-		System.out.println("searching for" + input.get(0) + " and " + input.get(1) );
-		
-		ArrayList<String> temp = getWordLadderBFS(input.get(0), input.get(1));
-		
-		System.out.println("printing the ladder: ");
-		printLadder(temp);
-		
+		if (!input.isEmpty()) {
+			//System.out.println("searching for " + start + " and " + end);
+			
+			ArrayList<String> temp = getWordLadderBFS(start, end);
+			
+			printLadder(temp);
+		}
 		
 		// TODO methods to read in words, output ladder
 	}
 	
 	public static void initialize() {
-		// initialize your static variables or constants here.
-		// We will call this method before running our JUNIT tests.  So call it 
-		// only once at the start of main.
+		start = "";
+		end = "";
 	}
 	
 	/**
@@ -76,11 +62,11 @@ public class Main {
 	public static ArrayList<String> parse(Scanner keyboard) {
 		// TO DO
 		ArrayList<String> result = new ArrayList<String>(0);
-		String start = keyboard.nextLine();
-		start = start.toUpperCase();
-		if (!start.equals("/quit")) {
-			result.add(start);
-			result.add(keyboard.nextLine().toUpperCase());
+		start = keyboard.nextLine();
+		if (!start.equalsIgnoreCase("/quit")) {
+			result.add(start.toUpperCase());
+			end = keyboard.nextLine();
+			result.add(end.toUpperCase());
 		}
 		return result;
 	}
@@ -92,21 +78,25 @@ public class Main {
 		// TODO some code
 		Set<String> dict = makeDictionary();
 		// TODO more code
+    	Main.start = start;
+    	Main.end = end;
+    	start = start.toUpperCase();
+    	end = end.toUpperCase();
 		
 		return null; // replace this line later with real return
 	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
-    	
     	Set<String> dict = makeDictionary();
-    	
+    	Main.start = start;
+    	Main.end = end;
     	start = start.toUpperCase();
     	end = end.toUpperCase();
     	
     	Queue<Ladder> myQueue = new LinkedList<Ladder>();
     	myQueue.add(new Ladder(start));
     	
-    	while (!myQueue.isEmpty()) {
+    	while (!myQueue.isEmpty() && start.equals(end)) {
     	
     		if (myQueue.element().getLast().equals(end)) {
   
@@ -121,7 +111,7 @@ public class Main {
     			
     			Adjacent wordsToCheck = new Adjacent(currentLadder.getLast(), dict, end);
     			
-    			System.out.println("adj words" + wordsToCheck.getAdjWords().toString());
+    			//System.out.println("adj words" + wordsToCheck.getAdjWords().toString());
     			
     			for (int i = 0; i < wordsToCheck.size(); i++) {
     				
@@ -155,19 +145,17 @@ public class Main {
 		return words;
 	}
 	
-	public static void printLadder(ArrayList<String> ladder) {		
-		
-		for (String s: ladder) {
-			System.out.println(s);
+	public static void printLadder(ArrayList<String> ladder) {
+		if (ladder.isEmpty()) {
+			System.out.println("no word ladder can be found between " + start + " and " + end + ".");
+		} else {
+			int rungs = ladder.size() - 2;
+			System.out.println("a " + rungs + "-rung word ladder exists between " + start + " and " + end + ".");
+			for (String s: ladder) {
+				System.out.println(s.toLowerCase());
+			}
 		}
 	}
 	// TODO
 	// Other private static methods here
-	
-	private static String formatString(String word, int index) {
-		StringBuilder temp = new StringBuilder(word);
-		temp.setCharAt(index, Character.toUpperCase(word.charAt(index)));
-		
-		return temp.toString();
-	}
 }
