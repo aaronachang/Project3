@@ -1,7 +1,14 @@
+//Ladder.java
+
 package assignment3;
 
 import java.util.ArrayList;
 
+/**
+ * Provides methods to store and access rungs in ladder.
+ * @author Aaron and Ka
+ *
+ */
 public class Ladder {
 	private ArrayList<String> rungs;
 

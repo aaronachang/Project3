@@ -16,6 +16,11 @@ package assignment3;
 import java.util.*;
 import java.io.*;
 
+/**
+ * Contains static methods to obtain a word ladder between two words.
+ * @author Aaron and Ka
+ *
+ */
 public class Main {
 
 	private static String start;
@@ -38,17 +43,17 @@ public class Main {
 		
 		ArrayList<String> input = parse(kb);
 		
-		if (!input.isEmpty()) {
-			//System.out.println("searching for " + start + " and " + end);
-			
-			ArrayList<String> temp = getWordLadderBFS(start, end);
-			
-			printLadder(temp);
+		if (!input.isEmpty()) {			
+			ArrayList<String> bfs = getWordLadderBFS(start, end);
+			printLadder(bfs);
+			ArrayList<String> dfs = getWordLadderDFS(start, end);
+			printLadder(dfs);
 		}
-		
-		// TODO methods to read in words, output ladder
 	}
 	
+	/**
+	 * Initializes static variables.
+	 */
 	public static void initialize() {
 		start = "";
 		end = "";
@@ -57,35 +62,94 @@ public class Main {
 	/**
 	 * @param keyboard Scanner connected to System.in
 	 * @return ArrayList of 2 Strings containing start word and end word. 
-	 * If command is /quit, return empty ArrayList. 
+	 * If command is /quit, return empty ArrayList.
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
-		// TO DO
 		ArrayList<String> result = new ArrayList<String>(0);
 		start = keyboard.nextLine();
 		if (!start.equalsIgnoreCase("/quit")) {
 			result.add(start.toUpperCase());
 			end = keyboard.nextLine();
+			if (end.equalsIgnoreCase("/quit")) {
+				return new ArrayList<String>(0);
+			}
 			result.add(end.toUpperCase());
 		}
 		return result;
 	}
 	
+	/**
+	 * Obtains word ladder between start and end using DFS.
+	 * @param start first word in word ladder
+	 * @param end last word in word ladder
+	 * @return
+	 */
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
-		
-		// Returned list should be ordered start to end.  Include start and end.
-		// Return empty list if no ladder.
-		// TODO some code
+		ArrayList<String> ladder = new ArrayList<String>();
 		Set<String> dict = makeDictionary();
-		// TODO more code
     	Main.start = start;
     	Main.end = end;
     	start = start.toUpperCase();
     	end = end.toUpperCase();
-		
-		return null; // replace this line later with real return
+		if (!(dict.contains(start) && dict.contains(end))) {
+			return ladder; 
+		}
+
+    	if (recursiveDFS(start, ladder, dict)) { // returns true if ladder is found
+    		ladder.add(start);
+			return reverseStringArray(ladder); // ladder must be reversed since words were added in reverse
+		} else {
+			return new ArrayList<String>(0);
+		}
 	}
 	
+	/**
+	 * Recursive helper method to make word ladder using DFS.
+	 * @param current word currently being evaluated
+	 * @param ladder word ladder
+	 * @param dict dictionary of words
+	 * @return
+	 */
+    private static Boolean recursiveDFS(String current, ArrayList<String> ladder, Set<String> dict) {
+    	dict.remove(current);
+    	
+    	if (current.equals(end.toUpperCase())) {
+    		return true; // base case; found end of word ladder
+    	}
+    	
+    	Adjacent neighbors = new Adjacent(current, dict);
+    	
+        for (int i = 0; i < neighbors.size(); i++) {
+        	String closestWord = neighbors.closestAdjacentWord(end.toUpperCase()); // finds closest neighbor to last word in ladder
+        	if (recursiveDFS(closestWord, ladder, dict)){
+        		ladder.add(closestWord); // reached base case; add words in ladder
+        		return true;
+        	} else {
+        		neighbors.remove(closestWord); // no neighbors; remove from list of neighbors
+        	}
+        }
+        return false; // no neighbors
+    }
+    
+    /**
+     * Reverses strings in an ArrayList.
+     * @param words to be reversed
+     * @return words in reverse order
+     */
+	private static ArrayList<String> reverseStringArray(ArrayList<String> words) {
+		ArrayList<String> result = new ArrayList<String>();
+		for (int i = words.size() - 1; i >= 0; i--) {
+			result.add(words.get(i));
+		}
+		return result; 
+	}
+	
+	/**
+	 * Obtains word ladder between start and end using BFS.
+	 * @param start first word in word ladder
+	 * @param end last word in word ladder
+	 * @return word ladder
+	 */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
     	Set<String> dict = makeDictionary();
     	Main.start = start;
@@ -96,10 +160,9 @@ public class Main {
     	Queue<Ladder> myQueue = new LinkedList<Ladder>();
     	myQueue.add(new Ladder(start));
     	
-    	while (!myQueue.isEmpty() && start.equals(end)) {
-    	
+    	while (!myQueue.isEmpty() && !start.equals(end)) {
+    		
     		if (myQueue.element().getLast().equals(end)) {
-  
     			return myQueue.remove().toArrayList();
     		}
     		else if(!dict.contains(myQueue.element().getLast())) {
@@ -109,26 +172,23 @@ public class Main {
     			dict.remove(myQueue.element().getLast());
     			Ladder currentLadder = myQueue.remove();
     			
-    			Adjacent wordsToCheck = new Adjacent(currentLadder.getLast(), dict, end);
-    			
-    			//System.out.println("adj words" + wordsToCheck.getAdjWords().toString());
+    			Adjacent wordsToCheck = new Adjacent(currentLadder.getLast(), dict);
     			
     			for (int i = 0; i < wordsToCheck.size(); i++) {
-    				
 					Ladder copyLadder = new Ladder(currentLadder.toArrayList());
-					
-					if (dict.contains(wordsToCheck.getAdjWords().get(i))) { 
-						copyLadder.add(wordsToCheck.get(i));
-						myQueue.add(copyLadder);
-					}
+					copyLadder.add(wordsToCheck.get(i));
+					myQueue.add(copyLadder);
 				}
     		}
     	}
-    	
     	return new ArrayList<String>(0);
 	}
     
-	public static Set<String>  makeDictionary () {
+    /**
+     * Makes dictionary from file.
+     * @return dictionary
+     */
+	public static Set<String> makeDictionary () {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
 		
@@ -145,17 +205,19 @@ public class Main {
 		return words;
 	}
 	
+	/**
+	 * Prints word ladder.
+	 * @param ladder empty if no ladder is found, contains word ladder if found
+	 */
 	public static void printLadder(ArrayList<String> ladder) {
 		if (ladder.isEmpty()) {
 			System.out.println("no word ladder can be found between " + start + " and " + end + ".");
 		} else {
 			int rungs = ladder.size() - 2;
 			System.out.println("a " + rungs + "-rung word ladder exists between " + start + " and " + end + ".");
-			for (String s: ladder) {
-				System.out.println(s.toLowerCase());
+			for (String words: ladder) {
+				System.out.println(words.toLowerCase());
 			}
 		}
 	}
-	// TODO
-	// Other private static methods here
 }
