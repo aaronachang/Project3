@@ -18,11 +18,10 @@ import java.io.*;
 
 /**
  * Contains static methods to obtain a word ladder between two words.
- * @author Aaron and Ka
+ * @author Aaron and Ka Tai
  *
  */
 public class Main {
-
 	private static String start;
 	private static String end;
 	
@@ -34,13 +33,15 @@ public class Main {
 		if (args.length != 0) {
 			kb = new Scanner(new File(args[0]));
 			ps = new PrintStream(new File(args[1]));
+			
 			System.setOut(ps);			// redirect output to ps
-		} else {
+		} 
+		else {
 			kb = new Scanner(System.in);// default from Stdin
 			ps = System.out;			// default to Stdout
 		}
-		initialize();
 		
+		initialize();
 		ArrayList<String> input = parse(kb);
 		
 		if (!input.isEmpty()) {			
@@ -67,14 +68,18 @@ public class Main {
 	public static ArrayList<String> parse(Scanner keyboard) {
 		ArrayList<String> result = new ArrayList<String>(0);
 		start = keyboard.nextLine();
+		
 		if (!start.equalsIgnoreCase("/quit")) {
 			result.add(start.toUpperCase());
 			end = keyboard.nextLine();
+			
 			if (end.equalsIgnoreCase("/quit")) {
 				return new ArrayList<String>(0);
 			}
+			
 			result.add(end.toUpperCase());
 		}
+		
 		return result;
 	}
 	
@@ -87,18 +92,23 @@ public class Main {
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		ArrayList<String> ladder = new ArrayList<String>();
 		Set<String> dict = makeDictionary();
+		
     	Main.start = start;
     	Main.end = end;
+    	
     	start = start.toUpperCase();
     	end = end.toUpperCase();
+    	
 		if (!(dict.contains(start) && dict.contains(end))) {
 			return ladder; 
 		}
 
     	if (recursiveDFS(start, ladder, dict)) { // returns true if ladder is found
     		ladder.add(start);
+    		
 			return reverseStringArray(ladder); // ladder must be reversed since words were added in reverse
-		} else {
+		} 
+    	else {
 			return new ArrayList<String>(0);
 		}
 	}
@@ -121,13 +131,17 @@ public class Main {
     	
         for (int i = 0; i < neighbors.size(); i++) {
         	String closestWord = neighbors.closestAdjacentWord(end.toUpperCase()); // finds closest neighbor to last word in ladder
+        	
         	if (recursiveDFS(closestWord, ladder, dict)){
         		ladder.add(closestWord); // reached base case; add words in ladder
+        		
         		return true;
-        	} else {
+        	} 
+        	else {
         		neighbors.remove(closestWord); // no neighbors; remove from list of neighbors
         	}
         }
+        
         return false; // no neighbors
     }
     
@@ -138,9 +152,11 @@ public class Main {
      */
 	private static ArrayList<String> reverseStringArray(ArrayList<String> words) {
 		ArrayList<String> result = new ArrayList<String>();
+		
 		for (int i = words.size() - 1; i >= 0; i--) {
 			result.add(words.get(i));
 		}
+		
 		return result; 
 	}
 	
@@ -152,8 +168,10 @@ public class Main {
 	 */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
     	Set<String> dict = makeDictionary();
+    	
     	Main.start = start;
     	Main.end = end;
+    	
     	start = start.toUpperCase();
     	end = end.toUpperCase();
     	
@@ -161,7 +179,6 @@ public class Main {
     	myQueue.add(new Ladder(start));
     	
     	while (!myQueue.isEmpty() && !start.equals(end)) {
-    		
     		if (myQueue.element().getLast().equals(end)) {
     			return myQueue.remove().toArrayList();
     		}
@@ -181,6 +198,7 @@ public class Main {
 				}
     		}
     	}
+    	
     	return new ArrayList<String>(0);
 	}
     
@@ -194,14 +212,17 @@ public class Main {
 		
 		try {
 			infile = new Scanner (new File("five_letter_words.txt"));
-		} catch (FileNotFoundException e) {
+		} 
+		catch (FileNotFoundException e) {
 			System.out.println("Dictionary File not Found!");
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
 		while (infile.hasNext()) {
 			words.add(infile.next().toUpperCase());
 		}
+		
 		return words;
 	}
 	
@@ -212,9 +233,11 @@ public class Main {
 	public static void printLadder(ArrayList<String> ladder) {
 		if (ladder.isEmpty()) {
 			System.out.println("no word ladder can be found between " + start + " and " + end + ".");
-		} else {
+		} 
+		else {
 			int rungs = ladder.size() - 2;
 			System.out.println("a " + rungs + "-rung word ladder exists between " + start + " and " + end + ".");
+			
 			for (String words: ladder) {
 				System.out.println(words.toLowerCase());
 			}
