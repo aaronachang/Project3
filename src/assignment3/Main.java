@@ -67,17 +67,20 @@ public class Main {
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
 		ArrayList<String> result = new ArrayList<String>(0);
-		start = keyboard.nextLine();
+		start = keyboard.nextLine().trim();
 		
 		if (!start.equalsIgnoreCase("/quit")) {
 			result.add(start.toUpperCase());
-			end = keyboard.nextLine();
+			end = keyboard.nextLine().trim();
 			
 			if (end.equalsIgnoreCase("/quit")) {
-				return new ArrayList<String>(0);
+				System.exit(0);
 			}
 			
 			result.add(end.toUpperCase());
+		}
+		else {
+			System.exit(0);
 		}
 		
 		return result;
