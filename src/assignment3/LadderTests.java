@@ -14,10 +14,22 @@ public class LadderTests {
 	Adjacent adjTest = new Adjacent("Hello", dict);
 	
 	
-	@Test
-	public void ladderLength() {
-		assertEquals(0, Main.getWordLadderBFS("alone", "aline").size() - 2);
-		assertEquals(0, Main.getWordLadderBFS("HEARD", "HEARS").size() - 2);
+	@Test(timeout = 30000)
+	public void oneAwayTest() {
+		ArrayList<String> res = Main.getWordLadderBFS("alone", "aline");
+		assertEquals(0, res.size() - 2);
+		HashSet<String> set = new HashSet<String>(res);
+		assertEquals(set.size(), res.size());
+		assertFalse(res == null || res.size() == 0);
+	}
+	
+	@Test(timeout = 30000)
+	public void oneAwayTest1() {
+		ArrayList<String> res = Main.getWordLadderBFS("HEARD", "HEARS");
+		assertEquals(0, res.size() - 2);
+		HashSet<String> set = new HashSet<String>(res);
+		assertEquals(set.size(), res.size());
+		assertFalse(res == null || res.size() == 0);
 	}
 	
 	@Test(timeout = 30000)
@@ -35,7 +47,14 @@ public class LadderTests {
 		HashSet<String> set = new HashSet<String>(res);
 		assertEquals(set.size(), res.size());
 		assertTrue(res == null || res.size() == 0);
-	 
+	}
+	
+	@Test(timeout = 30000)
+	public void testBFS2() {
+		ArrayList<String> res = Main.getWordLadderBFS("", "leady");
+		HashSet<String> set = new HashSet<String>(res);
+		assertEquals(set.size(), res.size());
+		assertTrue(res == null || res.size() == 0);
 	}
 	
 	@Test(timeout = 30000)
@@ -54,10 +73,20 @@ public class LadderTests {
 		assertFalse(res == null || res.size() == 0);
 	}
 	
-	@Test
+	@Test(timeout = 30000)
+	public void testDFS2() {
+		ArrayList<String> res = Main.getWordLadderDFS("", "geese");
+		HashSet<String> set = new HashSet<String>(res);
+		assertEquals(set.size(), res.size());
+		assertTrue(res == null || res.size() == 0);
+	}
+	
+	@Test(timeout = 30000)
 	public void emptyArray() {
 		assertEquals(new ArrayList<>(0), Main.getWordLadderBFS("jazzy","leady"));
-	
 	}
+	
+	
+	
 
 }

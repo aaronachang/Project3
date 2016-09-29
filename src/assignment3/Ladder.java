@@ -27,7 +27,6 @@ public class Ladder {
 	 */
 	Ladder(ArrayList<String> o) {
 		rungs = new ArrayList<String>(0);
-		
 		for (int i = 0; i < o.size(); i++) {
 			rungs.add(o.get(i));
 		}
