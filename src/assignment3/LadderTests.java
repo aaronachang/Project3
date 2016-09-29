@@ -4,14 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.Test;
 
 public class LadderTests {
-	
-	Set<String> dict = Main.makeDictionary();
-	Adjacent adjTest = new Adjacent("Hello", dict);
 	
 	@Test(timeout = 30000)
 	public void oneAwayTest() {
