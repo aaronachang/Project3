@@ -13,7 +13,6 @@ public class LadderTests {
 	Set<String> dict = Main.makeDictionary();
 	Adjacent adjTest = new Adjacent("Hello", dict);
 	
-	
 	@Test(timeout = 30000)
 	public void oneAwayTest() {
 		ArrayList<String> res = Main.getWordLadderBFS("alone", "aline");
@@ -85,8 +84,4 @@ public class LadderTests {
 	public void emptyArray() {
 		assertEquals(new ArrayList<>(0), Main.getWordLadderBFS("jazzy","leady"));
 	}
-	
-	
-	
-
 }
