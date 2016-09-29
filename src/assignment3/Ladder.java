@@ -1,5 +1,15 @@
-//Ladder.java
-
+/* WORD LADDER Ladder.java
+ * EE422C Project 3 submission by
+ * Aaron Chang
+ * AAC3434
+ * 16475
+ * Ka Tai Ho
+ * KH33248
+ * 16465
+ * Slip days used: <0>
+ * Git URL: https://github.com/aaronachang/Project3.git
+ * Fall 2016
+ */
 package assignment3;
 
 import java.util.ArrayList;
